@@ -1,9 +1,7 @@
-import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { InfoRounded } from "@mui/icons-material";
-import { Icon, Tooltip, Paper, Slider } from "@mui/material";
+import { Icon, Tooltip, Slider } from "@mui/material";
 import classes from "./styles.module.css";
-import { theme } from "../../constants";
 
 const GrowthCalculator = () => {
   interface LongTermRoiOpts {
@@ -30,9 +28,7 @@ const GrowthCalculator = () => {
   const [monthlyChurnRate, setMonthlyChurnRate] = useState(0);
   const [longTermRoiBottomLine, setLongTermRoiBottomLine] = useState(0);
 
-  const { handleSubmit } = useForm();
-
-  const onSubmit = handleSubmit((data) => {
+  useEffect(() => {
     const shortRoi = calculateShortTermRoi(
       monthlyContractValue,
       ADAPTIVE_PULSE_COST
@@ -53,7 +49,18 @@ const GrowthCalculator = () => {
     setShortTermRoi(shortRoi);
     setLongTermRoi(longRoi);
     setLongTermRoiBottomLine(longRoiBottomLine);
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    shortTermRoi,
+    longTermRoiBottomLine,
+    monthlyContractValue,
+    longTermRoi,
+    customerCount,
+    reps,
+    monthlySalary,
+    monthlyChurnRate,
+    longTermRoiBottomLine,
+  ]);
 
   const calculateShortTermRoi = (acv: number, ap: number): number => {
     return acv - ap;
@@ -83,7 +90,7 @@ const GrowthCalculator = () => {
 
   return (
     <div className={classes.formContainer}>
-      <form onSubmit={onSubmit}>
+      <form>
         <h2 className="text-dark text-bold">Growth Calculator</h2>
         <h4 className="text-dark text-bold mt-3" style={{ marginBottom: 0 }}>
           Customer Count:{" "}
@@ -177,7 +184,7 @@ const GrowthCalculator = () => {
           <b>({ADAPTIVE_PULSE_HOURS_SAVED} Hours)</b> back equaling{" "}
           <b> {currencyFormatter.format(monthlySalary)}</b> in salary
         </div>
-        <input type="submit" value="Submit" className={classes.submitButton} />
+        {/* <input type="submit" value="Submit" className={classes.submitButton} /> */}
       </form>
     </div>
   );
