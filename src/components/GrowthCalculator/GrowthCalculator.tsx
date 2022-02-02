@@ -36,6 +36,7 @@ const GrowthCalculator = () => {
   const [monthlyContractValue, setMonthlyContractValue] = useState(0);
   const [reps, setReps] = useState(0);
   const [monthlySalary, setMonthlySalary] = useState(0);
+  const [chartData, setChartData] = useState<number[] | []>([]);
   const [monthlyChurnRate, setMonthlyChurnRate] = useState(0);
   const [longTermRoiBottomLine, setLongTermRoiBottomLine] = useState(0);
 
@@ -60,6 +61,7 @@ const GrowthCalculator = () => {
     setShortTermRoi(shortRoi);
     setLongTermRoi(longRoi);
     setLongTermRoiBottomLine(longRoiBottomLine);
+    calculateMonthsRoi();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     shortTermRoi,
@@ -78,7 +80,8 @@ const GrowthCalculator = () => {
   };
 
   const calculateLongTermRoi = (inputs: LongTermRoiOpts): number => {
-    return inputs.customerCount * inputs.churnRate * inputs.shortTermRoi;
+    const customersDropped = getPercent(inputs.customerCount, inputs.churnRate);
+    return (inputs.customerCount - customersDropped) * inputs.shortTermRoi;
   };
 
   const calculateLongTermRoiBottomline = (
@@ -98,6 +101,10 @@ const GrowthCalculator = () => {
     style: "currency",
     currency: "USD",
   });
+
+  const getPercent = (num: number, per: number): number => {
+    return (num / 100) * per;
+  };
 
   ChartJS.register(
     CategoryScale,
@@ -143,7 +150,7 @@ const GrowthCalculator = () => {
     datasets: [
       {
         label: "Dataset",
-        data: [...Array(12)].map((item, ind) => ind + 1),
+        data: chartData,
         borderColor: "red",
         borderWidth: 0.4,
         pointDot: true,
@@ -155,14 +162,20 @@ const GrowthCalculator = () => {
     ],
   };
 
+  function calculateMonthsRoi() {
+    const months = new Array(12).fill(0);
+    const monthlyRoi = months.map((item, idx) => idx * shortTermRoi);
+    setChartData(monthlyRoi);
+  }
+
   return (
     <>
       <div className={classes.formContainer}>
         <form>
-          <h2 className='text-dark text-bold'>Growth Calculator</h2>
-          <h4 className='text-dark text-bold mt-3' style={{ marginBottom: 0 }}>
+          <h2 className="text-dark text-bold">Growth Calculator</h2>
+          <h4 className="text-dark text-bold mt-3" style={{ marginBottom: 0 }}>
             Customer Count:{" "}
-            <Tooltip title='Number Of Current Customers'>
+            <Tooltip title="Number Of Current Customers">
               <Icon component={InfoRounded} sx={iconStyles} />
             </Tooltip>
           </h4>
@@ -173,9 +186,9 @@ const GrowthCalculator = () => {
             onChange={(e: any) => setCustomerCount(e.target.value)}
           />
           <h4 style={{ margin: 0 }}>I've got {customerCount} customers</h4>
-          <h4 className='text-dark text-bold mt-3' style={{ marginBottom: 0 }}>
+          <h4 className="text-dark text-bold mt-3" style={{ marginBottom: 0 }}>
             Monthly Churn Rate:
-            <Tooltip title='(users at the beginning of the month - users at the end of the month) / users at the beginning of the month'>
+            <Tooltip title="(users at the beginning of the month - users at the end of the month) / users at the beginning of the month">
               <Icon component={InfoRounded} sx={iconStyles} />
             </Tooltip>
           </h4>
@@ -188,9 +201,9 @@ const GrowthCalculator = () => {
           <h4 style={{ margin: 0 }}>
             my monthly churn rate is {monthlyChurnRate}%
           </h4>
-          <h4 className='text-dark text-bold mt-3' style={{ marginBottom: 0 }}>
+          <h4 className="text-dark text-bold mt-3" style={{ marginBottom: 0 }}>
             Monthly account contract value:
-            <Tooltip title='Average contract value for the customer per month'>
+            <Tooltip title="Average contract value for the customer per month">
               <Icon component={InfoRounded} sx={iconStyles} />
             </Tooltip>
           </h4>
@@ -204,9 +217,9 @@ const GrowthCalculator = () => {
             My monthly account contract value is{" "}
             {currencyFormatter.format(monthlyContractValue)}
           </h4>
-          <h4 className='text-dark text-bold mt-3' style={{ marginBottom: 0 }}>
+          <h4 className="text-dark text-bold mt-3" style={{ marginBottom: 0 }}>
             Reps:
-            <Tooltip title='Number of users e.g. CSMs, AMs, AEs, Executives'>
+            <Tooltip title="Number of users e.g. CSMs, AMs, AEs, Executives">
               <Icon component={InfoRounded} sx={iconStyles} />
             </Tooltip>
           </h4>
@@ -219,9 +232,9 @@ const GrowthCalculator = () => {
           <h4 style={{ margin: 0 }}>
             Number of users e.g. CSMs, AMs, AEs, Executives are {reps}
           </h4>
-          <h4 className='text-dark text-bold mt-3' style={{ marginBottom: 0 }}>
+          <h4 className="text-dark text-bold mt-3" style={{ marginBottom: 0 }}>
             Average Monthly Salary:
-            <Tooltip title='Average salary of reps/12 months'>
+            <Tooltip title="Average salary of reps/12 months">
               <Icon component={InfoRounded} sx={iconStyles} />
             </Tooltip>
           </h4>
@@ -266,7 +279,7 @@ const GrowthCalculator = () => {
         }}
       >
         <h1>Your growth ceiling</h1>
-        <Chart type='line' options={options} data={data} />
+        <Chart type="line" options={options} data={data} />
       </div>
     </>
   );
