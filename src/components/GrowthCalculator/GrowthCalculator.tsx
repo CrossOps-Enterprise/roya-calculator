@@ -15,18 +15,6 @@ import {
 import { Chart } from "react-chartjs-2";
 
 const GrowthCalculator = () => {
-  interface LongTermRoiOpts {
-    customerCount: number;
-    churnRate: number;
-    shortTermRoi: number;
-  }
-
-  interface LongTermRoiBottomLineOpts {
-    reps: number;
-    monthlySalary: number;
-    hoursSaved: number;
-  }
-
   const ADAPTIVE_PULSE_COST = 1500;
   const ADAPTIVE_PULSE_HOURS_SAVED = 40;
 
@@ -79,16 +67,26 @@ const GrowthCalculator = () => {
     return acv - ap;
   };
 
-  const calculateLongTermRoi = (inputs: LongTermRoiOpts): number => {
+  const calculateLongTermRoi = (inputs: {
+    customerCount: number;
+    churnRate: number;
+    shortTermRoi: number;
+  }): number => {
     const customersDropped = getPercent(inputs.customerCount, inputs.churnRate);
-    return (inputs.customerCount - customersDropped) * inputs.shortTermRoi;
+    return (
+      inputs.customerCount -
+      customersDropped * monthlyContractValue -
+      ADAPTIVE_PULSE_COST
+    );
   };
 
-  const calculateLongTermRoiBottomline = (
-    inputs: LongTermRoiBottomLineOpts
-  ): number => {
-    const { hoursSaved, monthlySalary, reps } = inputs;
-    return reps * monthlySalary * hoursSaved;
+  const calculateLongTermRoiBottomline = (inputs: {
+    reps: number;
+    monthlySalary: number;
+    hoursSaved: number;
+  }): number => {
+    // const { hoursSaved, monthlySalary, reps } = inputs;
+    return inputs.reps * inputs.monthlySalary * inputs.hoursSaved;
   };
 
   const iconStyles = {
@@ -165,7 +163,11 @@ const GrowthCalculator = () => {
   function calculateMonthsRoi() {
     const months = new Array(12).fill(0);
     const monthlyRoi = months.map((item, idx) => {
-      return idx * (shortTermRoi / (longTermRoi / longTermRoiBottomLine));
+      const newShortRoi = shortTermRoi * idx;
+      const longRoi = longTermRoi * idx;
+      const newLongBottomRoi = longTermRoiBottomLine * idx;
+
+      return newShortRoi / longRoi / newLongBottomRoi;
     });
 
     setChartData(monthlyRoi);
