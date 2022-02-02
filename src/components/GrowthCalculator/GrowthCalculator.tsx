@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { InfoRounded } from "@mui/icons-material";
 import { Icon, Tooltip, Paper, Slider } from "@mui/material";
 import classes from "./styles.module.css";
@@ -20,6 +20,7 @@ const GrowthCalculator = () => {
 
   const ADAPTIVE_PULSE_COST = 1500;
   const ADAPTIVE_PULSE_HOURS_SAVED = 40;
+
   const [shortTermRoi, setShortTermRoi] = useState(0);
   const [longTermRoi, setLongTermRoi] = useState(0);
   const [customerCount, setCustomerCount] = useState(0);
@@ -91,6 +92,8 @@ const GrowthCalculator = () => {
           </Tooltip>
         </h4>
         <Slider
+          min={0}
+          max={2000}
           value={customerCount}
           onChange={(e: any) => setCustomerCount(e.target.value)}
         />
@@ -102,6 +105,8 @@ const GrowthCalculator = () => {
           </Tooltip>
         </h4>
         <Slider
+          min={0}
+          max={25}
           value={monthlyChurnRate}
           onChange={(e: any) => setMonthlyChurnRate(e.target.value)}
         />
@@ -115,6 +120,8 @@ const GrowthCalculator = () => {
           </Tooltip>
         </h4>
         <Slider
+          min={0}
+          max={5000}
           value={monthlyContractValue}
           onChange={(e: any) => setMonthlyContractValue(e.target.value)}
         />
@@ -127,7 +134,12 @@ const GrowthCalculator = () => {
             <Icon component={InfoRounded} sx={iconStyles} />
           </Tooltip>
         </h4>
-        <Slider value={reps} onChange={(e: any) => setReps(e.target.value)} />
+        <Slider
+          min={0}
+          max={20}
+          value={reps}
+          onChange={(e: any) => setReps(e.target.value)}
+        />
         <h4 style={{ margin: 0 }}>
           Number of users e.g. CSMs, AMs, AEs, Executives are {reps}
         </h4>
@@ -138,6 +150,8 @@ const GrowthCalculator = () => {
           </Tooltip>
         </h4>
         <Slider
+          min={0}
+          max={10000}
           value={monthlySalary}
           onChange={(e: any) => setMonthlySalary(e.target.value)}
         />
@@ -155,21 +169,22 @@ const GrowthCalculator = () => {
         >
           <Paper elevation={3} sx={{ padding: 1, marginTop: 1, width: "100%" }}>
             <label className="text-dark text-bold" style={{ color: "black" }}>
-              SHORT TERM ROI
+              When AP saves {customerCount} customer, then your ROI is{" "}
+              {currencyFormatter.format(shortTermRoi)}.
             </label>
-            {currencyFormatter.format(shortTermRoi)}
           </Paper>
           <Paper elevation={3} sx={{ padding: 1, marginTop: 1, width: "100%" }}>
             <label className="text-dark text-bold" style={{ color: "black" }}>
-              LONG TERM ROI
+              When AP can prevent and reduce up to ($) in lost revenue which
+              is (# times [calculation=$ in lost revenue/AP cost] ROI
             </label>
-            {currencyFormatter.format(longTermRoi)}
           </Paper>
           <Paper elevation={3} sx={{ padding: 1, marginTop: 1, width: "100%" }}>
             <label className="text-dark text-bold" style={{ color: "black" }}>
-              LONG TERM ROI - BOTTOM LINE
+              AP can help make your team more productive by giving them (
+              {ADAPTIVE_PULSE_HOURS_SAVED} Hours) back equaling {monthlySalary}{" "}
+              in salary
             </label>
-            {currencyFormatter.format(longTermRoiBottomLine)}
           </Paper>
         </div>
         <input type="submit" value="Submit" className={classes.submitButton} />
