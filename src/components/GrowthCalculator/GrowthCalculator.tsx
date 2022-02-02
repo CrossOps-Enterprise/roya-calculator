@@ -164,7 +164,10 @@ const GrowthCalculator = () => {
 
   function calculateMonthsRoi() {
     const months = new Array(12).fill(0);
-    const monthlyRoi = months.map((item, idx) => idx * shortTermRoi);
+    const monthlyRoi = months.map((item, idx) => {
+      return idx * (shortTermRoi / (longTermRoi / longTermRoiBottomLine));
+    });
+
     setChartData(monthlyRoi);
   }
 
