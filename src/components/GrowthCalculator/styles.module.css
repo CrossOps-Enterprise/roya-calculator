@@ -1,10 +1,13 @@
 .formContainer {
+  margin: 0 auto;
   padding: 20px;
   background-color: var(--secondary);
   max-width: 500px;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
+  /* align-items: flex-start; */
+  flex-direction: column;
 }
 
 :root {
