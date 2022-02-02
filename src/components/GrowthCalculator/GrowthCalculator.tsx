@@ -126,7 +126,8 @@ const GrowthCalculator = () => {
           onChange={(e: any) => setMonthlyContractValue(e.target.value)}
         />
         <h4 style={{ margin: 0 }}>
-          My monthly account contract value is {monthlyContractValue}
+          My monthly account contract value is{" "}
+          {currencyFormatter.format(monthlyContractValue)}
         </h4>
         <h4 className="text-dark text-bold mt-3" style={{ marginBottom: 0 }}>
           Reps:
@@ -156,26 +157,26 @@ const GrowthCalculator = () => {
           onChange={(e: any) => setMonthlySalary(e.target.value)}
         />
         <h4 style={{ margin: 0 }}>
-          My average monthly Salary is {monthlySalary}
+          My average monthly Salary is {currencyFormatter.format(monthlySalary)}
         </h4>
 
-          <div
-            className={classes.outputBoxes}
-            style={{ color: "black", display: "block" }}
-          >
-            When AP saves {customerCount} customer, then your ROI is{" "}
-            <b>{currencyFormatter.format(shortTermRoi)}</b>.
-          </div>
-          <div className={classes.outputBoxes} style={{ color: "black" }}>
-            When AP can prevent and reduce up to ($) in lost revenue which is{" "}
-            <b>{currencyFormatter.format(longTermRoi / ADAPTIVE_PULSE_COST)}</b>{" "}
-            ROI
-          </div>
-          <div className={classes.outputBoxes} style={{ color: "black" }}>
-            AP can help make your team more productive by giving them{" "}
-            <b>({ADAPTIVE_PULSE_HOURS_SAVED} Hours)</b> back equaling{" "}
-            <b> {currencyFormatter.format(monthlySalary)}</b> in salary
-          </div>
+        <div
+          className={classes.outputBoxes}
+          style={{ color: "black", display: "block" }}
+        >
+          When AP saves {customerCount} customer, then your ROI is{" "}
+          <b>{currencyFormatter.format(shortTermRoi)}</b>.
+        </div>
+        <div className={classes.outputBoxes} style={{ color: "black" }}>
+          When AP can prevent and reduce up to ($) in lost revenue which is{" "}
+          <b>{currencyFormatter.format(longTermRoi / ADAPTIVE_PULSE_COST)}</b>{" "}
+          ROI
+        </div>
+        <div className={classes.outputBoxes} style={{ color: "black" }}>
+          AP can help make your team more productive by giving them{" "}
+          <b>({ADAPTIVE_PULSE_HOURS_SAVED} Hours)</b> back equaling{" "}
+          <b> {currencyFormatter.format(monthlySalary)}</b> in salary
+        </div>
         <input type="submit" value="Submit" className={classes.submitButton} />
       </form>
     </div>
