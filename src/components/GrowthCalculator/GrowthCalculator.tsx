@@ -159,34 +159,23 @@ const GrowthCalculator = () => {
           My average monthly Salary is {monthlySalary}
         </h4>
 
-        <div
-          className="mt-3"
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            flexWrap: "wrap",
-          }}
-        >
-          <Paper elevation={3} sx={{ padding: 1, marginTop: 1, width: "100%" }}>
-            <label className="text-dark text-bold" style={{ color: "black" }}>
-              When AP saves {customerCount} customer, then your ROI is{" "}
-              {currencyFormatter.format(shortTermRoi)}.
-            </label>
-          </Paper>
-          <Paper elevation={3} sx={{ padding: 1, marginTop: 1, width: "100%" }}>
-            <label className="text-dark text-bold" style={{ color: "black" }}>
-              When AP can prevent and reduce up to ($) in lost revenue which
-              is (# times [calculation=$ in lost revenue/AP cost] ROI
-            </label>
-          </Paper>
-          <Paper elevation={3} sx={{ padding: 1, marginTop: 1, width: "100%" }}>
-            <label className="text-dark text-bold" style={{ color: "black" }}>
-              AP can help make your team more productive by giving them (
-              {ADAPTIVE_PULSE_HOURS_SAVED} Hours) back equaling {monthlySalary}{" "}
-              in salary
-            </label>
-          </Paper>
-        </div>
+          <div
+            className={classes.outputBoxes}
+            style={{ color: "black", display: "block" }}
+          >
+            When AP saves {customerCount} customer, then your ROI is{" "}
+            <b>{currencyFormatter.format(shortTermRoi)}</b>.
+          </div>
+          <div className={classes.outputBoxes} style={{ color: "black" }}>
+            When AP can prevent and reduce up to ($) in lost revenue which is{" "}
+            <b>{currencyFormatter.format(longTermRoi / ADAPTIVE_PULSE_COST)}</b>{" "}
+            ROI
+          </div>
+          <div className={classes.outputBoxes} style={{ color: "black" }}>
+            AP can help make your team more productive by giving them{" "}
+            <b>({ADAPTIVE_PULSE_HOURS_SAVED} Hours)</b> back equaling{" "}
+            <b> {currencyFormatter.format(monthlySalary)}</b> in salary
+          </div>
         <input type="submit" value="Submit" className={classes.submitButton} />
       </form>
     </div>

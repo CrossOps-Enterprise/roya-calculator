@@ -20,3 +20,8 @@
   letter-spacing: 1px;
   width: 100%;
 }
+
+.outputBoxes {
+  margin-top: 20px;
+  color: black; 
+}
